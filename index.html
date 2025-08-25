@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ลงทะเบียนโครงการกายภาพบำบัดเพื่อสังคมไทยปลอดบุหรี่</title>
+
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+  <!-- jquery.Thailand CSS -->
+  <link rel="stylesheet" href="https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/dist/jquery.Thailand.min.css">
+
+  <!-- Bootstrap Datepicker -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+ 
+  <style>
+    * { font-family: "Kanit"; }
+    body { background: #ffcfcf; }
+    .text-pink { color: #f13596; }
+
+    /* ✅ ปรับการตัดคำให้ข้อความไม่ล้นจอ */
+    p {
+      word-wrap: break-word;
+      word-break: break-word;
+      white-space: normal;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 768px) {
+      h1.display-4 {
+        font-size: 2rem;  /* หดลงบนมือถือ */
+      }
+      h2.h3 {
+        font-size: 1.25rem;
+      }
+      p {
+        font-size: 0.95rem; /* ย่อขนาดฟอนต์ลงบนจอเล็ก */
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container my-4">
+    <div class="p-4 mb-4 bg-white rounded shadow-sm text-center">
+      <h1 class="display-4 fw-bold text-pink">กายภาพบำบัด</h1>
+      <h2 class="h3 fw-bold text-dark">เพื่อสังคมไทยปลอด <span class="text-danger">บุหรี่</span></h2>
+      <p class="text-muted text-center">งานกายภาพบำบัด กลุ่มงานเวชกรรมฟื้นฟู<br>โรงพยาบาลถลาง จังหวัดภูเก็ต</p>
+    </div>
+
+    <!-- Form -->
+    <form id="smokingForm" class="row g-3 bg-white p-4 rounded shadow-sm" autocomplete="off">
+
+      <div class="col-md-6">
+        <label class="form-label">เลขบัตรประชาชน</label>
+        <input type="text" class="form-control" id="idCard" maxlength="13" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">เพศ</label>
+        <select class="form-select" id="gender" required>
+          <option value="">เลือกเพศ</option>
+          <option value="ชาย">ชาย</option>
+          <option value="หญิง">หญิง</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3">
+          <label class="form-label">คำนำหน้าชื่อ</label>
+          <select class="form-select" id="prefix" required>
+            <option value="">เลือก</option>
+            <option value="นาย">นาย</option>
+            <option value="นาง">นาง</option>
+            <option value="นางสาว">นางสาว</option>
+            <option value="เด็กชาย">เด็กชาย</option>
+            <option value="เด็กหญิง">เด็กหญิง</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">ชื่อ</label>
+          <input type="text" class="form-control" id="firstName" required>
+        </div>
+
+        <div class="col-md-5">
+          <label class="form-label">สกุล</label>
+          <input type="text" class="form-control" id="lastName" required>
+        </div>
+      </div>
+
+      <!-- วัน/เดือน/ปี เกิด -->
+      <div class="col-12">
+        <label class="form-label">วัน/เดือน/ปี เกิด</label>
+        <div class="d-flex gap-2">
+          <select id="birthDay" class="form-select" required>
+            <option value="">วัน</option>
+            <script>
+              for(let d=1; d<=31; d++){
+                document.write(`<option value="${d.toString().padStart(2,'0')}">${d}</option>`);
+              }
+            </script>
+          </select>
+
+          <select id="birthMonth" class="form-select" required>
+            <option value="">เดือน</option>
+            <option value="01">มกราคม</option>
+            <option value="02">กุมภาพันธ์</option>
+            <option value="03">มีนาคม</option>
+            <option value="04">เมษายน</option>
+            <option value="05">พฤษภาคม</option>
+            <option value="06">มิถุนายน</option>
+            <option value="07">กรกฎาคม</option>
+            <option value="08">สิงหาคม</option>
+            <option value="09">กันยายน</option>
+            <option value="10">ตุลาคม</option>
+            <option value="11">พฤศจิกายน</option>
+            <option value="12">ธันวาคม</option>
+          </select>
+
+          <select id="birthYear" class="form-select" required>
+            <option value="">ปี พ.ศ.</option>
+            <script>
+              let thisYear = new Date().getFullYear() + 543; // พ.ศ.
+              for(let y=thisYear; y>=2500; y--){
+                document.write(`<option value="${y-543}">${y}</option>`); // value เป็น ค.ศ. แต่แสดงเป็น พ.ศ.
+              }
+            </script>
+          </select>
+        </div>
+      </div>
+
+      <!-- Address -->
+      <h5 class="mt-4 fw-bold">ที่อยู่</h5>
+      <div class="col-md-3">
+        <label class="form-label">บ้านเลขที่</label>
+        <input type="text" class="form-control" id="houseNumber">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">หมู่ที่</label>
+        <input type="text" class="form-control" id="villageNumber">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">แขวง/ตำบล</label>
+        <input type="text" class="form-control" id="district" name="district">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">เขต/อำเภอ</label>
+        <input type="text" class="form-control" id="amphoe" name="amphoe">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">จังหวัด</label>
+        <input type="text" class="form-control" id="province" name="province">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">รหัสไปรษณีย์</label>
+        <input type="text" class="form-control" id="postalCode" name="zipcode">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">เบอร์โทรศัพท์</label>
+        <input type="text" class="form-control" id="phone" maxlength="10" required>
+      </div>
+
+      <!-- Smoking history -->
+      <h5 class="mt-4 fw-bold">ประวัติการสูบบุหรี่</h5>
+      <div class="col-md-6">
+        <label class="form-label">อายุที่เริ่มสูบ</label>
+        <select class="form-select" id="startAge" required>
+          <option value="">เลือกช่วงอายุ</option>
+          <option value="10-14">10 - 14 ปี</option>
+          <option value="15-19">15 - 19 ปี</option>
+          <option value="20-24">20 - 24 ปี</option>
+          <option value="25+">25 ปีขึ้นไป</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">สูบวันละกี่มวน</label>
+        <input type="number" class="form-control" id="cigarettesPerDay" min="0" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">สูบมากี่ปี</label>
+        <input type="number" class="form-control" id="smokingYears" min="0" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">กี่เดือน</label>
+        <input type="number" class="form-control" id="smokingMonths" min="0" max="11" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">เคยเลิกกี่ครั้ง</label>
+        <input type="number" class="form-control" id="quitAttempts" min="0" required>
+      </div>
+
+      <div class="col-md-12 mt-4">
+        <label class="form-label fw-bold">ปัจจุบันคุณอยากเลิกสูบบุหรี่หรือไม่</label>
+        <select class="form-select" id="wantToQuit" required>
+          <option value="">เลือก</option>
+          <option value="อยาก">อยาก</option>
+          <option value="ไม่อยาก">ไม่อยาก</option>
+          <option value="ไม่แน่ใจ">ไม่แน่ใจ</option>
+        </select>
+      </div>
+
+      <!-- แบบประเมินความรุนแรงของการติดบุหรี่ -->
+      <div id="dependenceAssessment" class="mt-4 d-none">
+        <h5 class="fw-bold">ประเมินความรุนแรงของการติดบุหรี่</h5>
+
+        <div class="col-md-12">
+          <label class="form-label">1. หลังตื่นนอนตอนเช้าคุณสูบบุหรี่มวนแรกเมื่อไหร่</label>
+          <select class="form-select" id="q1">
+            <option value="">เลือก</option>
+            <option>ภายใน 5 นาที หลังตื่นนอน</option>
+            <option>6 - 30 นาที หลังตื่นนอน</option>
+            <option>31 - 60 นาที หลังตื่นนอน</option>
+            <option>60 นาทีขึ้นไป หลังตื่นนอน</option>
+          </select>
+        </div>
+
+        <div class="col-md-12 mt-2">
+          <label class="form-label">2. คุณรู้สึกอึดอัดใจหรือลำบากใจไหมเมื่อต้องอยู่ในเขตปลอดบุหรี่ เช่น ห้องประชุม รถเมล์ ร้านอาหาร ห้องสมุด โรงพยาบาล โรงภาพยนตร์ ห้างสรรพสินค้า</label>
+          <select class="form-select" id="q2">
+            <option value="">เลือก</option>
+            <option>ใช่</option>
+            <option>ไม่ใช่</option>
+          </select>
+        </div>
+
+        <div class="col-md-12 mt-2">
+          <label class="form-label">3. บุหรี่มวนไหนที่คุณไม่อยากเลิกมากที่สุด</label>
+          <select class="form-select" id="q3">
+            <option value="">เลือก</option>
+            <option>มวนแรกของวัน</option>
+            <option>มวนอื่นๆ</option>
+          </select>
+        </div>
+
+        <div class="col-md-12 mt-2">
+          <label class="form-label">4. โดยปกติคุณสูบบุหรี่วันละกี่มวน</label>
+          <select class="form-select" id="q4">
+            <option value="">เลือก</option>
+            <option>น้อยกว่าหรือเท่ากับ 10 มวน</option>
+            <option>11 - 20 มวน</option>
+            <option>21 - 30 มวน</option>
+            <option>มากกว่า 30 มวนขึ้นไป</option>
+          </select>
+        </div>
+
+        <div class="col-md-12 mt-2">
+          <label class="form-label">5. คุณสูบบุหรี่ภายใน 2-3 ชั่วโมงแรกหลังตื่นนอน มากกว่าในช่วงเวลาอื่นของวันหรือไม่</label>
+          <select class="form-select" id="q5">
+            <option value="">เลือก</option>
+            <option>ใช่</option>
+            <option>ไม่ใช่</option>
+          </select>
+        </div>
+
+        <div class="col-md-12 mt-2">
+          <label class="form-label">6. คุณยังคงสูบบุหรี่ต่อไป แม้คุณจะนอนป่วยอยู่ในโรงพยาบาล นอนอยู่บนเตียงทั้งวัน หรือช่วงเป็นไข้หวัดและมีปัญหาการหายใจ</label>
+          <select class="form-select" id="q6">
+            <option value="">เลือก</option>
+            <option>ใช่</option>
+            <option>ไม่ใช่</option>
+          </select>
+        </div>
+      </div>
+
+
+      <div class="col-12 text-center mt-4">
+        <button type="submit" class="btn btn-lg btn-primary">บันทึกข้อมูล</button>
+      </div>
+    </form>
+
+    <!-- Success Message -->
+    <div id="successMessage" class="d-none text-center p-4 bg-white rounded shadow-sm mt-4">
+      <h3 class="text-success fw-bold">✅ ลงทะเบียนสำเร็จ!</h3>
+      <p>เราได้รับข้อมูลของท่านแล้ว</p>
+      <p class="fw-semibold">งานกายภาพบำบัด โรงพยาบาลถลาง</p>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Thailand.js dependencies -->
+  <script src="https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/dependencies/JQL.min.js"></script>
+  <script src="https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/dependencies/typeahead.bundle.js"></script>
+  <script src="https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/dist/jquery.Thailand.min.js"></script>
+
+  <script>
+    let userId = '';
+    let displayName = '';
+
+    async function init() {
+  try {
+    await liff.init({ liffId: '2007904397-v3Nz8kmO' });
+
+    if (!liff.isLoggedIn()) {
+      liff.login({ scope: 'profile openid' });
+      return;
+    }
+
+    // ดึงข้อมูลโปรไฟล์
+    const profile = await liff.getProfile();
+    userId = profile.userId;
+    displayName = profile.displayName;
+
+    idToken = liff.getIDToken();
+    console.log("Profile:", profile);
+    console.log("idToken:", idToken);
+
+  } catch (err) {
+    console.error('LIFF Init Error:', err);
+    alert('ไม่สามารถเริ่ม LIFF ได้: ' + err.message);
+  }
+}
+    document.addEventListener('DOMContentLoaded', init);
+
+    // Thailand Autocomplete
+    $.Thailand({
+      database: 'https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/database/db.json',
+      $district: $('#district'),
+      $amphoe: $('#amphoe'),
+      $province: $('#province'),
+      $zipcode: $('#postalCode')
+    });
+        // Initialize birth date dropdowns
+        function initializeBirthDate() {
+            // Populate days (1-31)
+            const daySelect = document.getElementById('birthDay');
+            for (let i = 1; i <= 31; i++) {
+                const option = document.createElement('option');
+                option.value = i.toString().padStart(2, '0');
+                option.textContent = i;
+                daySelect.appendChild(option);
+            }
+
+            // Populate years (current year - 100 to current year - 10) in Buddhist Era
+            const yearSelect = document.getElementById('birthYear');
+            const currentYear = new Date().getFullYear();
+            const currentBuddhistYear = currentYear + 543;
+            
+            for (let i = currentBuddhistYear - 10; i >= currentBuddhistYear - 100; i--) {
+                const option = document.createElement('option');
+                option.value = (i - 543).toString(); // Store as Christian year
+                option.textContent = i; // Display as Buddhist year
+                yearSelect.appendChild(option);
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeBirthDate();
+        });
+
+        // แสดง/ซ่อน แบบประเมินความรุนแรงของการติดบุหรี่
+        document.getElementById("wantToQuit").addEventListener("change", function() {
+          const assessment = document.getElementById("dependenceAssessment");
+          if (this.value === "อยาก" || this.value === "ไม่แน่ใจ") {
+            assessment.classList.remove("d-none");
+          } else {
+            assessment.classList.add("d-none");
+          }
+        });
+
+    // Submit form
+    $("#smokingForm").on("submit", function(e) {
+      e.preventDefault();
+
+      console.log('Submit clicked');
+      console.log('userId:', userId);
+      console.log('displayName:', displayName);
+    
+      const submitBtn = document.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = 'กำลังบันทึก...';
+        submitBtn.disabled = true;
+
+     
+      const birthDay = document.getElementById('birthDay').value;
+      const birthMonth = document.getElementById('birthMonth').value;
+      const birthYear = parseInt(document.getElementById('birthYear').value) + 543;
+
+      const firstNameInput = document.getElementById('firstName').value;
+      const lastNameInput = document.getElementById('lastName').value;
+      
+      const data = {
+        userId,
+        displayName,
+        timestamp: new Date().toLocaleString('th-TH', {
+                  timeZone: 'Asia/Bangkok',
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit'
+                }),
+        idCard: $("#idCard").val(),
+        gender: $("#gender").val(),
+        prefix: $("#prefix").val(),
+        firstName: $("#firstName").val(),
+        lastName: $("#lastName").val(),
+        birthDate: `${birthDay}/${birthMonth}/${birthYear}`, // ✅ เป็น พ.ศ.
+        houseNumber: $("#houseNumber").val(),
+        villageNumber: $("#villageNumber").val(),
+        district: $("#district").val(),
+        amphoe: $("#amphoe").val(),
+        province: $("#province").val(),
+        postalCode: $("#postalCode").val(),
+        phone: $("#phone").val(),
+        startAge: $("#startAge").val(),
+        cigarettesPerDay: $("#cigarettesPerDay").val(),
+        smokingYears: $("#smokingYears").val(),
+        smokingMonths: $("#smokingMonths").val(),
+        quitAttempts: $("#quitAttempts").val(),
+        wantToQuit: $("#wantToQuit").val(),
+        q1: $("#q1").val(),
+        q2: $("#q2").val(),
+        q3: $("#q3").val(),
+        q4: $("#q4").val(),
+        q5: $("#q5").val(),
+        q6: $("#q6").val(),
+      };
+        //URL BEnew
+        fetch("https://script.google.com/macros/s/AKfycbwFU6TmUuYWEwWFik9VwSdlkQ_1XSDd7z-g1rTxAbSg5qmuanHDe4DrGSoICEGwapssTA/exec", {
+        method: "POST",
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(res => {
+        if (res.status === 'success') {
+          //URL SentLinePTnoSmoke
+          fetch('https://script.google.com/macros/s/AKfycbxWPS5eTrTATsLKuOJrZyHtePF_g5v_6awzdQEnn9uUJgC0rKzbv3H1MJopCW3f1_F6xA/exec', {
+          method: 'POST',
+          body: JSON.stringify({ 
+              userId, 
+              firstName: firstNameInput, 
+              lastName: lastNameInput 
+            })
+          }); // ส่งข้อความ
+          showSuccessMessage();
+        } else {
+          alert('เกิดข้อผิดพลาด: ' + data.message);
+        }
+      })
+      .catch(err => alert("Error: " + err.message));
+    });
+
+    function showSuccessMessage() {
+      document.getElementById("smokingForm").classList.add("d-none");
+      document.getElementById("successMessage").classList.remove("d-none");
+    }
+
+  </script>
+</body>
+</html>
