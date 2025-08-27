@@ -378,6 +378,41 @@
           }
         });
 
+/* ====== ✅ คะแนน & แปลผล Fagerström ====== */
+    function scoreDependence() {
+      const mapQ1 = { 'ภายใน 5 นาที หลังตื่นนอน': 3,'6 - 30 นาที หลังตื่นนอน': 2,'31 - 60 นาที หลังตื่นนอน': 1,'60 นาทีขึ้นไป หลังตื่นนอน': 0 };
+      const mapYesNo = { 'ใช่': 1, 'ไม่ใช่': 0 };
+      const mapQ3 = { 'มวนแรกของวัน': 1, 'มวนอื่นๆ': 0 };
+      const mapQ4 = { 'น้อยกว่าหรือเท่ากับ 10 มวน': 0,'11 - 20 มวน': 1,'21 - 30 มวน': 2,'มากกว่า 30 มวนขึ้นไป': 3 };
+      const q1=$("#q1").val(),q2=$("#q2").val(),q3=$("#q3").val(),q4=$("#q4").val(),q5=$("#q5").val(),q6=$("#q6").val();
+      if(!q1||!q2||!q3||!q4||!q5||!q6) return { total:null, level:null };
+      const total=(mapQ1[q1]??0)+(mapYesNo[q2]??0)+(mapQ3[q3]??0)+(mapQ4[q4]??0)+(mapYesNo[q5]??0)+(mapYesNo[q6]??0);
+      let level='';
+      if(total<=3) level='ไม่นับว่าคุณติดสารนิโคติน';
+      else if(total<=5) level='ติดสารนิโคตินระดับปานกลาง';
+      else if(total<=7) level='ติดสารนิโคตินระดับปานกลาง และมีแนวโน้มสูงจะพัฒนาเป็นระดับสูง';
+      else if(total<=9) level='ติดสารนิโคตินระดับสูง';
+      else level='ติดสารนิโคตินระดับสูงมาก';
+      return { total, level };
+    }
+
+    /* ✅ แสดงผลแบบ Live */
+    function updateDependenceResult(){
+      const { total, level } = scoreDependence();
+      const box=document.getElementById('dependenceResult');
+      if(total===null){ box.classList.add('d-none'); box.innerHTML=''; return; }
+      box.classList.remove('d-none'); box.innerHTML=`<div class="fw-bold">คะแนนรวม: ${total} / 10</div><div>ผลแปล: ${level}</div>`;
+    }
+    ['#q1','#q2','#q3','#q4','#q5','#q6'].forEach(id=>$(document).on('change',id,updateDependenceResult));
+
+    document.getElementById("wantToQuit").addEventListener("change", function() {
+      const assess=document.getElementById("dependenceAssessment");
+      if(this.value==="อยาก"||this.value==="ไม่แน่ใจ"){ assess.classList.remove("d-none"); }
+      else { assess.classList.add("d-none"); ['q1','q2','q3','q4','q5','q6'].forEach(id=>{document.getElementById(id).value='';}); document.getElementById("dependenceResult").classList.add("d-none"); }
+    });
+
+    /* ====== Submit ====== */
+
     $("#smokingForm").on("submit", function(e) {
   e.preventDefault();
 
@@ -485,7 +520,6 @@
 </body>
 
 </html>
-
 
 
 
