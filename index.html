@@ -277,13 +277,20 @@
     </form>
 
     <!-- Success Message -->
-    <div id="successMessage" class="d-none text-center p-4 bg-white rounded shadow-sm mt-4">
-      <h3 class="text-success fw-bold">✅ ลงทะเบียนสำเร็จ!</h3>
-      <p>เราได้รับข้อมูลของท่านแล้ว</p>
-      <p>ระบบจะส่งแบบสอบถามติดตามผล<br>เมื่อครบระยะ 3 เดือน และ 6 เดือน</p>
-      <p class="fw-semibold">งานกายภาพบำบัด โรงพยาบาลถลาง</p>
-    </div>
+<div id="successMessage" class="d-none text-center p-4 bg-white rounded shadow-sm mt-4">
+  <h3 class="text-success fw-bold">✅ ลงทะเบียนสำเร็จ!</h3>
+  <p>เราได้รับข้อมูลของท่านแล้ว</p>
+
+  <!-- กล่องแสดงผลการประเมิน -->
+  <div id="dependenceSummary" 
+       class="border rounded p-3 mt-3 bg-light text-dark fw-bold mx-auto"
+       style="max-width: 400px;">
   </div>
+
+  <p>ระบบจะส่งแบบสอบถามติดตามผล<br>เมื่อครบระยะ 3 เดือน และ 6 เดือน</p>
+  <p class="fw-semibold">งานกายภาพบำบัด โรงพยาบาลถลาง</p>
+</div>
+ </div>
 
   <!-- Scripts -->
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
@@ -371,100 +378,113 @@
           }
         });
 
-    // Submit form
     $("#smokingForm").on("submit", function(e) {
-      e.preventDefault();
+  e.preventDefault();
 
-      console.log('Submit clicked');
-      console.log('userId:', userId);
-      console.log('displayName:', displayName);
-    
-      const submitBtn = document.querySelector('button[type="submit"]');
-      const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = 'กำลังบันทึก...';
-        submitBtn.disabled = true;
+  console.log('Submit clicked');
+  console.log('userId:', userId);
+  console.log('displayName:', displayName);
 
-     
-      const birthDay = document.getElementById('birthDay').value;
-      const birthMonth = document.getElementById('birthMonth').value;
-      const birthYear = parseInt(document.getElementById('birthYear').value) + 543;
+  const submitBtn = document.querySelector('button[type="submit"]');
+  const originalText = submitBtn.innerHTML;
+  submitBtn.innerHTML = 'กำลังบันทึก...';
+  submitBtn.disabled = true;
 
-      const firstNameInput = document.getElementById('firstName').value;
-      const lastNameInput = document.getElementById('lastName').value;
-      
-      const data = {
-        userId,
-        displayName,
-        timestamp: new Date().toLocaleString('th-TH', {
-                  timeZone: 'Asia/Bangkok',
-                  year: 'numeric',
-                  month: '2-digit',
-                  day: '2-digit',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  second: '2-digit'
-                }),
-        idCard: $("#idCard").val(),
-        gender: $("#gender").val(),
-        prefix: $("#prefix").val(),
-        firstName: $("#firstName").val(),
-        lastName: $("#lastName").val(),
-        birthDate: `${birthDay}/${birthMonth}/${birthYear}`, // ✅ เป็น พ.ศ.
-        houseNumber: $("#houseNumber").val(),
-        villageNumber: $("#villageNumber").val(),
-        district: $("#district").val(),
-        amphoe: $("#amphoe").val(),
-        province: $("#province").val(),
-        postalCode: $("#postalCode").val(),
-        phone: $("#phone").val(),
-        startAge: $("#startAge").val(),
-        cigarettesPerDay: $("#cigarettesPerDay").val(),
-        smokingYears: $("#smokingYears").val(),
-        smokingMonths: $("#smokingMonths").val(),
-        quitAttempts: $("#quitAttempts").val(),
-        wantToQuit: $("#wantToQuit").val(),
-        q1: $("#q1").val(),
-        q2: $("#q2").val(),
-        q3: $("#q3").val(),
-        q4: $("#q4").val(),
-        q5: $("#q5").val(),
-        q6: $("#q6").val(),
-      };
-        //URL BEnew
-        fetch("https://script.google.com/macros/s/AKfycbx5Zz5VMWX_fflWfLaBOfrpDi2-Rnn-eAlZy-pG0ozgayiK6g_ggVwu86bZq3lZus1tOQ/exec", {
-        method: "POST",
-        body: JSON.stringify(data)
-      })
-      .then(res => res.json())
-      .then(res => {
-        if (res.status === 'success') {
-          //URL SentLinePTnoSmoke
-          fetch('https://script.google.com/macros/s/AKfycbwUbkO-srP3SEBIb6w1vW7sBVqmZNSFOLEdcch67LUkhWhM2LFpYVXnAPF_qGaPpHkvfg/exec', {
-          method: 'POST',
-          body: JSON.stringify({ 
-              userId, 
-              firstName: firstNameInput, 
-              lastName: lastNameInput 
-            })
-          }); // ส่งข้อความ
-          showSuccessMessage();
-        } else {
-          alert('เกิดข้อผิดพลาด: ' + data.message);
-        }
-      })
-      .catch(err => alert("Error: " + err.message));
-    });
+  const birthDay = document.getElementById('birthDay').value;
+  const birthMonth = document.getElementById('birthMonth').value;
+  const birthYear = parseInt(document.getElementById('birthYear').value) + 543;
 
-    function showSuccessMessage() {
-      document.getElementById("smokingForm").classList.add("d-none");
-      document.getElementById("successMessage").classList.remove("d-none");
+  const firstNameInput = document.getElementById('firstName').value;
+  const lastNameInput = document.getElementById('lastName').value;
+
+  // ✅ สร้าง object data ก่อน
+  const data = {
+    userId,
+    displayName,
+    timestamp: new Date().toLocaleString('th-TH', {
+      timeZone: 'Asia/Bangkok',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    }),
+    idCard: $("#idCard").val(),
+    gender: $("#gender").val(),
+    prefix: $("#prefix").val(),
+    firstName: $("#firstName").val(),
+    lastName: $("#lastName").val(),
+    birthDate: `${birthDay}/${birthMonth}/${birthYear}`,
+    houseNumber: $("#houseNumber").val(),
+    villageNumber: $("#villageNumber").val(),
+    district: $("#district").val(),
+    amphoe: $("#amphoe").val(),
+    province: $("#province").val(),
+    postalCode: $("#postalCode").val(),
+    phone: $("#phone").val(),
+    startAge: $("#startAge").val(),
+    cigarettesPerDay: $("#cigarettesPerDay").val(),
+    smokingYears: $("#smokingYears").val(),
+    smokingMonths: $("#smokingMonths").val(),
+    quitAttempts: $("#quitAttempts").val(),
+    wantToQuit: $("#wantToQuit").val(),
+    q1: $("#q1").val(),
+    q2: $("#q2").val(),
+    q3: $("#q3").val(),
+    q4: $("#q4").val(),
+    q5: $("#q5").val(),
+    q6: $("#q6").val(),
+  };
+
+  // ✅ ประเมินคะแนนตรงนี้
+  const { total: dependenceScore, level: dependenceLevel } = scoreDependence();
+  data.dependenceScore = dependenceScore;
+  data.dependenceLevel = dependenceLevel;
+
+  fetch("https://script.google.com/macros/s/AKfycbx5Zz5VMWX_fflWfLaBOfrpDi2-Rnn-eAlZy-pG0ozgayiK6g_ggVwu86bZq3lZus1tOQ/exec", {
+    method: "POST",
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(res => {
+    if (res.status === 'success') {
+      // ส่งข้อความ LINE
+      fetch('https://script.google.com/macros/s/AKfycbwUbkO-srP3SEBIb6w1vW7sBVqmZNSFOLEdcch67LUkhWhM2LFpYVXnAPF_qGaPpHkvfg/exec', {
+        method: 'POST',
+        body: JSON.stringify({ 
+          userId, 
+          firstName: firstNameInput, 
+          lastName: lastNameInput 
+        })
+      });
+
+      // ✅ แสดง success + ผลรวมคะแนน
+      showSuccessMessage(dependenceScore, dependenceLevel);
+    } else {
+      alert('เกิดข้อผิดพลาด: ' + data.message);
     }
+  })
+  .catch(err => alert("Error: " + err.message));
+});
+
+
+    function showSuccessMessage(dependenceScore, dependenceLevel) {
+  document.getElementById("smokingForm").classList.add("d-none");
+  document.getElementById("successMessage").classList.remove("d-none");
+
+  if (dependenceScore !== null) {
+    document.getElementById("dependenceSummary").innerHTML =
+      `จากการประเมินระดับการติดบุหรี่ (สารนิโคติน)<br>` +
+      `คะแนนของคุณคือ <span class="text-primary">${dependenceScore}/10</span><br>` +
+      `ผลการแปล: <span class="text-danger">${dependenceLevel}</span>`;
+  }
+}
 
   </script>
 </body>
 
 </html>
-
 
 
 
