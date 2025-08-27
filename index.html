@@ -208,12 +208,12 @@
       </div>
 
       <!-- แบบประเมินความรุนแรงของการติดบุหรี่ -->
-      <div id="dependenceAssessment" class="mt-4 d-none">
+      <div id="dependenceAssessment" class="mt-4">
         <h5 class="fw-bold">ประเมินความรุนแรงของการติดบุหรี่</h5>
 
         <div class="col-md-12">
           <label class="form-label">1. หลังตื่นนอนตอนเช้าคุณสูบบุหรี่มวนแรกเมื่อไหร่</label>
-          <select class="form-select" id="q1">
+          <select class="form-select" id="q1" required>
             <option value="">เลือก</option>
             <option>ภายใน 5 นาที หลังตื่นนอน</option>
             <option>6 - 30 นาที หลังตื่นนอน</option>
@@ -224,7 +224,7 @@
 
         <div class="col-md-12 mt-2">
           <label class="form-label">2. คุณรู้สึกอึดอัดใจหรือลำบากใจไหมเมื่อต้องอยู่ในเขตปลอดบุหรี่ เช่น ห้องประชุม รถเมล์ ร้านอาหาร ห้องสมุด โรงพยาบาล โรงภาพยนตร์ ห้างสรรพสินค้า</label>
-          <select class="form-select" id="q2">
+          <select class="form-select" id="q2" required>
             <option value="">เลือก</option>
             <option>ใช่</option>
             <option>ไม่ใช่</option>
@@ -233,7 +233,7 @@
 
         <div class="col-md-12 mt-2">
           <label class="form-label">3. บุหรี่มวนไหนที่คุณไม่อยากเลิกมากที่สุด</label>
-          <select class="form-select" id="q3">
+          <select class="form-select" id="q3" required>
             <option value="">เลือก</option>
             <option>มวนแรกของวัน</option>
             <option>มวนอื่นๆ</option>
@@ -242,7 +242,7 @@
 
         <div class="col-md-12 mt-2">
           <label class="form-label">4. โดยปกติคุณสูบบุหรี่วันละกี่มวน</label>
-          <select class="form-select" id="q4">
+          <select class="form-select" id="q4" required>
             <option value="">เลือก</option>
             <option>น้อยกว่าหรือเท่ากับ 10 มวน</option>
             <option>11 - 20 มวน</option>
@@ -253,7 +253,7 @@
 
         <div class="col-md-12 mt-2">
           <label class="form-label">5. คุณสูบบุหรี่ภายใน 2-3 ชั่วโมงแรกหลังตื่นนอน มากกว่าในช่วงเวลาอื่นของวันหรือไม่</label>
-          <select class="form-select" id="q5">
+          <select class="form-select" id="q5" required>
             <option value="">เลือก</option>
             <option>ใช่</option>
             <option>ไม่ใช่</option>
@@ -262,7 +262,7 @@
 
         <div class="col-md-12 mt-2">
           <label class="form-label">6. คุณยังคงสูบบุหรี่ต่อไป แม้คุณจะนอนป่วยอยู่ในโรงพยาบาล นอนอยู่บนเตียงทั้งวัน หรือช่วงเป็นไข้หวัดและมีปัญหาการหายใจ</label>
-          <select class="form-select" id="q6">
+          <select class="form-select" id="q6" required>
             <option value="">เลือก</option>
             <option>ใช่</option>
             <option>ไม่ใช่</option>
@@ -275,6 +275,13 @@
         <button type="submit" class="btn btn-lg btn-primary">บันทึกข้อมูล</button>
       </div>
     </form>
+
+<!-- Loading Message -->
+<div id="loadingMessage" class="d-none text-center p-4 bg-white rounded shadow-sm mt-4">
+<h3 class="text-primary fw-bold">⏳ กำลังบันทึกข้อมูล...</h3>
+<p>กรุณารอสักครู่</p>
+</div>
+	
 
     <!-- Success Message -->
 <div id="successMessage" class="d-none text-center p-4 bg-white rounded shadow-sm mt-4">
@@ -368,16 +375,6 @@
             initializeBirthDate();
         });
 
-        // แสดง/ซ่อน แบบประเมินความรุนแรงของการติดบุหรี่
-        document.getElementById("wantToQuit").addEventListener("change", function() {
-          const assessment = document.getElementById("dependenceAssessment");
-          if (this.value === "อยาก" || this.value === "ไม่แน่ใจ") {
-            assessment.classList.remove("d-none");
-          } else {
-            assessment.classList.add("d-none");
-          }
-        });
-
 /* ====== ✅ คะแนน & แปลผล Fagerström ====== */
     function scoreDependence() {
       const mapQ1 = { 'ภายใน 5 นาที หลังตื่นนอน': 3,'6 - 30 นาที หลังตื่นนอน': 2,'31 - 60 นาที หลังตื่นนอน': 1,'60 นาทีขึ้นไป หลังตื่นนอน': 0 };
@@ -415,6 +412,8 @@
 
     $("#smokingForm").on("submit", function(e) {
   e.preventDefault();
+document.getElementById("smokingForm").classList.add("d-none");
+document.getElementById("loadingMessage").classList.remove("d-none");
 
   console.log('Submit clicked');
   console.log('userId:', userId);
