@@ -544,9 +544,10 @@ document.getElementById("loadingMessage").classList.remove("d-none");
   };
 
   // ✅ ประเมินคะแนนตรงนี้
-  const { total: dependenceScore, level: dependenceLevel } = scoreDependence();
+  const { total: dependenceScore, level: dependenceLevel, advice: dependenceAdvice } = scoreDependence();
   data.dependenceScore = dependenceScore;
   data.dependenceLevel = dependenceLevel;
+  data.dependenceAdvice = dependenceAdvice;
 
   fetch("https://script.google.com/macros/s/AKfycbzqKFZIbmKoTb0M6HV5Jd6sr2qcYJxmtHrrSgLxBGKlw_F8G_nEyR4ad-lBN9125wbO-g/exec", {
     method: "POST",
@@ -561,7 +562,10 @@ document.getElementById("loadingMessage").classList.remove("d-none");
         body: JSON.stringify({ 
           userId, 
           firstName: firstNameInput, 
-          lastName: lastNameInput 
+          lastName: lastNameInput,
+		  dependenceScore,
+    	  dependenceLevel,
+          dependenceAdvice
         })
       });
 
@@ -591,6 +595,7 @@ document.getElementById("loadingMessage").classList.remove("d-none");
 </body>
 
 </html>
+
 
 
 
