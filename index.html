@@ -408,17 +408,19 @@ function scoreDependence() {
   if(total<=3) {
     level='ไม่นับว่าคุณติดสารนิโคติน';
     advice= "คุณยังไม่จัดว่าเป็นผู้ที่ติดนิโคติน\n"
-       + "คุณสามารถเลิกสูบบุหรี่ได้ด้วยตนเอง\n"
-       + "หากคุณเคยพยายามเลิกแล้วไม่สำเร็จ\n"
-       + "การใช้พฤติกรรมบำบัดจะช่วยให้คุณเลิกได้ง่ายขึ้น\n"
-       + "เช่น การหากิจกรรมทดแทนเมื่ออยากสูบ\n"
-       + "หรือการเลี่ยงสถานการณ์ที่กระตุ้นความอยาก";
+      	 + "คุณสามารถเลิกสูบบุหรี่ได้ด้วยตนเอง\n"
+      	 + "หากคุณเคยพยายามเลิกแล้วไม่สำเร็จ\n"
+       	+ "การใช้พฤติกรรมบำบัด\n"
+		+ "จะช่วยให้คุณเลิกได้ง่ายขึ้น\n"
+       	+ "เช่น การหากิจกรรมทดแทนเมื่ออยากสูบ\n"
+       	+ "หรือการเลี่ยงสถานการณ์ที่กระตุ้นความอยาก";
   }
   else if(total<=5) {
     level='ติดสารนิโคตินระดับปานกลาง';
     advice= "คุณอยู่ในระดับการติดนิโคตินปานกลาง\n"
           + "คุณยังสามารถเลิกได้ด้วยตนเอง\n"
-          + "แต่ถ้าคุณเคยล้มเหลวจากความพยายามที่ผ่านมา\n"
+          + "แต่ถ้าคุณเคยล้มเหลว\n"
+		  + "จากความพยายามที่ผ่านมา\n"
           + "อาจใช้ พฤติกรรมบำบัด ร่วมด้วย\n"
           + "เช่น การบันทึกสถานการณ์ที่กระตุ้นความอยาก\n"
           + "การหากิจกรรมอื่นทดแทน\n"
@@ -442,8 +444,10 @@ function scoreDependence() {
     advice= "คุณอยู่ในระดับการติดนิโคตินสูง\n"
           + "ซึ่งต้องใส่ใจและเอาจริงเอาจัง\n"
           + "กับการเลิกบุหรี่เพื่อสุขภาพที่ดีขึ้น\n"
-          + "การเลิกด้วยตนเองหรือพึ่งเพียงกำลังใจอาจไม่เพียงพอ\n"
-          + "หากคุณเคยลองใช้พฤติกรรมบำบัดหรือวิธีช่วยเหลืออื่น ๆ แล้ว\n"
+          + "การเลิกด้วยตนเอง\n"
+		  + "หรือพึ่งเพียงกำลังใจอาจไม่เพียงพอ\n"
+          + "หากคุณเคยลองใช้พฤติกรรมบำบัด\n"
+		  + "หรือวิธีช่วยเหลืออื่น ๆ แล้ว\n"
           + "เช่น แผ่นแปะนิโคติน หรือหมากฝรั่งนิโคติน\n"
           + "แต่ยังไม่สำเร็จ คุณควรพบแพทย์\n"
           + "เพื่อวางแผนการเลิกบุหรี่ที่เหมาะสมกับคุณ\n"
@@ -473,12 +477,6 @@ function scoreDependence() {
       box.classList.remove('d-none'); box.innerHTML=`<div class="fw-bold">คะแนนรวม: ${total} / 10</div><div>ผลแปล: ${level}</div>`;
     }
     ['#q1','#q2','#q3','#q4','#q5','#q6'].forEach(id=>$(document).on('change',id,updateDependenceResult));
-
-    document.getElementById("wantToQuit").addEventListener("change", function() {
-      const assess=document.getElementById("dependenceAssessment");
-      if(this.value==="อยาก"||this.value==="ไม่แน่ใจ"){ assess.classList.remove("d-none"); }
-      else { assess.classList.add("d-none"); ['q1','q2','q3','q4','q5','q6'].forEach(id=>{document.getElementById(id).value='';}); document.getElementById("dependenceResult").classList.add("d-none"); }
-    });
 
     /* ====== Submit ====== */
 
@@ -579,15 +577,17 @@ document.getElementById("loadingMessage").classList.remove("d-none");
 });
 
 
-    function showSuccessMessage(dependenceScore, dependenceLevel) {
-  document.getElementById("smokingForm").classList.add("d-none");
-  document.getElementById("successMessage").classList.remove("d-none");
+function showSuccessMessage(dependenceScore, dependenceLevel) {
+	document.getElementById("smokingForm").classList.add("d-none");
+  	document.getElementById("loadingMessage").classList.add("d-none");
+  	document.getElementById("successMessage").classList.remove("d-none");
 
   if (dependenceScore !== null) {
     document.getElementById("dependenceSummary").innerHTML =
-      `จากการประเมินระดับการติดบุหรี่ (สารนิโคติน)<br>` +
+      `ผลการประเมิน<br>` +
+	  `ระดับการติดบุหรี่ (สารนิโคติน)<br>` +
       `คะแนนของคุณคือ <span class="text-primary">${dependenceScore}/10</span><br>` +
-      `ผลการแปล: <span class="text-danger">${dependenceLevel}</span>`;
+      `การแปลผล:<br>` + <span class="text-danger">${dependenceLevel}</span>`;
   }
 }
 
@@ -595,6 +595,7 @@ document.getElementById("loadingMessage").classList.remove("d-none");
 </body>
 
 </html>
+
 
 
 
