@@ -578,16 +578,18 @@ document.getElementById("loadingMessage").classList.remove("d-none");
 
 
 function showSuccessMessage(dependenceScore, dependenceLevel) {
-	document.getElementById("smokingForm").classList.add("d-none");
-  	document.getElementById("loadingMessage").classList.add("d-none");
-  	document.getElementById("successMessage").classList.remove("d-none");
+  document.getElementById("smokingForm").classList.add("d-none");
+  document.getElementById("loadingMessage").classList.add("d-none");
+  document.getElementById("successMessage").classList.remove("d-none");
 
   if (dependenceScore !== null) {
-    document.getElementById("dependenceSummary").innerHTML =
-      `ผลการประเมิน<br>` +
-	  `ระดับการติดบุหรี่ (สารนิโคติน)<br>` +
-      `คะแนนของคุณคือ <span class="text-primary">${dependenceScore}/10</span><br>` +
-      `การแปลผล:<br>` + <span class="text-danger">${dependenceLevel}</span>`;
+    document.getElementById("dependenceSummary").innerHTML = `
+      ผลการประเมิน<br>
+      ระดับการติดบุหรี่ (สารนิโคติน)<br>
+      คะแนนของคุณคือ <span class="text-primary">${dependenceScore}/10</span><br>
+      การแปลผล:<br>
+      <span class="text-danger">${dependenceLevel}</span>
+    `;
   }
 }
 
@@ -595,6 +597,7 @@ function showSuccessMessage(dependenceScore, dependenceLevel) {
 </body>
 
 </html>
+
 
 
 
